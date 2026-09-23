@@ -2,18 +2,13 @@ usuario = {
     "nome": "Lucas",
     "email": "Lucas@gmail.com",
     "idade": 16,
-    "ativo": True
-}
-
+    "ativo": True }
 print(usuario)
 print(f"nome: {usuario["nome"]}")
-
 usuario["idade"] = 17
 usuario["cidade"] = "Santa Cruz do Sul"
-
 print(f"nova idade: {usuario["idade"]}")
 print(f"Cidade: {usuario["cidade"]}")
-
 del usuario["cidade"]
 usuario.pop("idade")
 print(usuario)
@@ -26,3 +21,4 @@ for valor in usuario.values():
 
 for chave, valor in usuario.items():
     print(f"chave: {chave} | valor: {valor}")
+    
