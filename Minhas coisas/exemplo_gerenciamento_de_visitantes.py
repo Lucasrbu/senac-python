@@ -13,10 +13,7 @@ def solicitar_texto(mensagem):
         print("Este campo não pode ficar vazio.")
 
 def calcular_idade(data_nascimento):
-    data_nascimento = datetime.strptime(
-        data_nascimento,
-        "%d/%m/%Y"
-    )
+    data_nascimento = datetime.strptime(data_nascimento, "%d/%m/%Y")
     hoje = datetime.now()
     idade = hoje.year - data_nascimento.year
     if (
@@ -41,26 +38,16 @@ def cadastrar_visitante(visitantes):
     print("=" * 50)
     nome = solicitar_texto("Nome: ")
     while True:
-        data_nascimento = solicitar_texto(
-            "Data de nascimento (DD/MM/AAAA): "
-        )
+        data_nascimento = solicitar_texto("Data de nascimento (DD/MM/AAAA): ")
         try:
-            datetime.strptime(
-                data_nascimento,
-                "%d/%m/%Y"
-            )
+            datetime.strptime(data_nascimento, "%d/%m/%Y")
             break
         except ValueError:
-            print(
-                "Data inválida. "
-                "Use o formato DD/MM/AAAA."
-            )
+            print("Data inválida. " "Use o formato DD/MM/AAAA.")
     while True:
         cpf = solicitar_texto("CPF: ")
         if cpf_cadastrado(visitantes, cpf):
-            print(
-                "Este CPF já está cadastrado."
-            )
+            print("Este CPF já está cadastrado.")
         else:
             break
     print("\nTipos de ingresso:")
@@ -81,20 +68,17 @@ def cadastrar_visitante(visitantes):
         else:
             print("Opcao invalida. Escolha 1, 2 ou 3.")
     while True:
-        data_visita = solicitar_texto(
-            "Data da visita (DD/MM/AAAA): "
-        )
+        data_visita = solicitar_texto("Data da visita (DD/MM/AAAA): ")
         try:
-            datetime.strptime(
-                data_visita,
-                "%d/%m/%Y"
-            )
-            break
+            datetime.strptime(data_visita, "%d/%m/%Y")
+            data_da_visita = datetime.strptime(data_visita, "%d/%m/%Y")
+            hoje = datetime.now()
+            if data_da_visita < hoje:
+                print("Data da visita inválida")
+            else:
+                break
         except ValueError:
-            print(
-                "Data inválida. "
-                "Use o formato DD/MM/AAAA."
-            )
+            print("Data inválida. " "Use o formato DD/MM/AAAA.")
     numero_ingresso = str(uuid.uuid4())
     visitante = {
         "nome": nome,
@@ -139,19 +123,15 @@ def listar_visitantes(visitantes):
         print(f"\nVisitante {indice}")
         print(f"Nome: {visitante['nome']}")
         print(f"Idade: {idade} anos")
-        print(
-            f"Tipo de ingresso: "
-            f"{visitante['tipo_ingresso']}"
-        )
+        print(f"Tipo de ingresso: " f"{visitante['tipo_ingresso']}")
 
 
 def consultar_visitante(visitantes):
     print("\n" + "=" * 50)
     print("CONSULTAR VISITANTE")
     print("=" * 50)
-    cpf = solicitar_texto(
-        "Digite o CPF do visitante: "
-    )
+    cpf = solicitar_texto("Digite o CPF do visitante: ")
+
     for visitante in visitantes:
         if visitante["cpf"] == cpf:
             idade = calcular_idade(visitante["data_nascimento"])
@@ -166,11 +146,40 @@ def consultar_visitante(visitantes):
             print(f"Número do ingresso: " f"{visitante['numero_ingresso']}")
             print("-" * 50)
             return
+        
+    print("\nNenhum visitante encontrado " "com esse CPF.")
 
-    print(
-        "\nNenhum visitante encontrado "
-        "com esse CPF."
-    )
+def consultar_visitantes_por_data_da_visita(visitantes):
+    print("\n" + "=" * 50)
+    print("CONSULTAR VISITANTE")
+    print("=" * 50)
+    data_visita = solicitar_texto("Data da visita (DD/MM/AAAA): ")
+    try:
+        datetime.strptime(data_visita, "%d/%m/%Y")
+        data_da_visita = datetime.strptime(data_visita, "%d/%m/%Y")
+        hoje = datetime.now()
+        if data_da_visita < hoje:
+            print("Data da visita inválida")
+    except ValueError:
+        print("Data inválida. " "Use o formato DD/MM/AAAA.")
+
+    for visitante in visitantes:
+            if visitante["data_visita"] == data_visita:
+                idade = calcular_idade(visitante["data_nascimento"])
+                print("\nVisitante encontrado!")
+                print("-" * 50)
+                print(f"Nome: {visitante['nome']}")
+                print(f"Data de nascimento: " f"{visitante['data_nascimento']}")
+                print(f"Idade: {idade} anos")
+                print(f"CPF: {visitante['cpf']}")
+                print(f"Tipo de ingresso: " f"{visitante['tipo_ingresso']}")
+                print(f"Data da visita: " f"{visitante['data_visita']}")
+                print(f"Número do ingresso: " f"{visitante['numero_ingresso']}")
+                print("-" * 50)
+                return
+    print("\nNenhum visitante encontrado " "para esta data.")
+        
+        
 
 def remover_visitante(visitantes):
 
@@ -180,10 +189,7 @@ def remover_visitante(visitantes):
     cpf = solicitar_texto("Digite o CPF do visitante: ")
     for visitante in visitantes:
         if visitante["cpf"] == cpf:
-            print(
-                f"\nVisitante encontrado: "
-                f"{visitante['nome']}"
-            )
+            print(f"\nVisitante encontrado: " f"{visitante['nome']}")
             confirmar = input("Deseja realmente remover? (S/N): ").strip().upper()
             if confirmar == "S":
                 visitantes.remove(visitante)
@@ -191,9 +197,7 @@ def remover_visitante(visitantes):
             else:
                 print("\nOperação cancelada.")
             return
-    print(
-        "\nNenhum visitante encontrado com esse CPF."
-    )
+    print("\nNenhum visitante encontrado com esse CPF.")
 
 def remover_visitantes_json(visitantes):
     with open(ARQUIVO_DADOS, "w", encoding="utf-8") as f:
@@ -229,6 +233,7 @@ def main():
         print("4 - Ordenar visitantes")
         print("5 - Filtrar visitantes")
         print("6 - Consultar visitante")
+        print("7 - Consultar ")
         print("0 - Encerrar programa")
         print("=" * 60)
         opcao = input(
@@ -247,16 +252,13 @@ def main():
             ordenar_visitantes(visitantes)
         elif opcao == "6":
             consultar_visitante(visitantes)
+        elif opcao == "7":
+            consultar_visitantes_por_data_da_visita(visitantes)
         elif opcao == "0":
-            print(
-                "\nPrograma encerrado."
-            )
+            print("\nPrograma encerrado.")
             break
         else:
-            print(
-                "\nOpção inválida. "
-                "Tente novamente."
-            )
+            print("\nOpção inválida. " "Tente novamente.")
 
 if __name__ == "__main__":
     main()
