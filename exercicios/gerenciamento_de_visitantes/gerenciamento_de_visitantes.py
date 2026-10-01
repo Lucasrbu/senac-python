@@ -1,10 +1,12 @@
 import uuid
 import json
 import os
+import visitante_repository
 from datetime import datetime
 ARQUIVO_DADOS = "dados.json"
 
 visitantes = []
+visitantes = visitante_repository.carregar_visitantes()
 def solicitar_texto(mensagem):
     while True:
         valor = input(mensagem).strip()
@@ -89,25 +91,13 @@ def cadastrar_visitante(visitantes):
         "numero_ingresso": numero_ingresso
     }
     visitantes.append(visitante)
+    visitante_repository.salvar_visitantes(visitantes)
     print("\nVisitante cadastrado com sucesso!")
     print(f"Nome: {nome}")
     print(f"CPF: {cpf}")
     print(f"Tipo de ingresso: {tipo_ingresso}")
     print(f"Data da visita: {data_visita}")
     print(f"Numero do ingresso: {numero_ingresso}")
-
-def salvar_visitantes(visitantes):
-    with open(ARQUIVO_DADOS, "w", encoding="utf-8") as f:
-        json.dump(visitantes, f, indent=4)
-    print("\nDados salvos com sucesso")
-
-def carregar_visitantes():
-    """"Carrega a lista de visitantes do arquivo JSON"""
-    try:
-        with open(ARQUIVO_DADOS, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return []
 
 def listar_visitantes(visitantes):
     print("\n" + "=" * 70)
@@ -125,13 +115,11 @@ def listar_visitantes(visitantes):
         print(f"Idade: {idade} anos")
         print(f"Tipo de ingresso: " f"{visitante['tipo_ingresso']}")
 
-
 def consultar_visitante(visitantes):
     print("\n" + "=" * 50)
     print("CONSULTAR VISITANTE")
     print("=" * 50)
     cpf = solicitar_texto("Digite o CPF do visitante: ")
-
     for visitante in visitantes:
         if visitante["cpf"] == cpf:
             idade = calcular_idade(visitante["data_nascimento"])
@@ -146,12 +134,11 @@ def consultar_visitante(visitantes):
             print(f"Número do ingresso: " f"{visitante['numero_ingresso']}")
             print("-" * 50)
             return
-        
     print("\nNenhum visitante encontrado " "com esse CPF.")
 
 def consultar_visitantes_por_data_da_visita(visitantes):
     print("\n" + "=" * 50)
-    print("CONSULTAR VISITANTE")
+    print("CONSULTANDO VISITANTE POR DATA DE VISITA")
     print("=" * 50)
     data_visita = solicitar_texto("Data da visita (DD/MM/AAAA): ")
     try:
@@ -162,7 +149,6 @@ def consultar_visitantes_por_data_da_visita(visitantes):
             print("Data da visita inválida")
     except ValueError:
         print("Data inválida. " "Use o formato DD/MM/AAAA.")
-
     for visitante in visitantes:
             if visitante["data_visita"] == data_visita:
                 idade = calcular_idade(visitante["data_nascimento"])
@@ -179,10 +165,31 @@ def consultar_visitantes_por_data_da_visita(visitantes):
                 return
     print("\nNenhum visitante encontrado " "para esta data.")
         
-        
+def estatisticas(visitantes):
+    print("\n" + "=" * 40)
+    print("ESTATÍSTICAS DO PARQUE")
+    print("=" * 40)
+    contador1 = 0
+    contador2 = 0
+    contador3 = 0
+    contador4 = 0
+    for visitante in visitantes:
+        contador1 = contador1 + 1
+    print(f"Total de visitantes: {contador1}")
+    for visitante in visitantes:
+        if visitantes[contador2["tipo_ingresso"]] == "Normal":
+            contador2 = contador2 + 1
+    print(f"Ingressos Normal: {contador2}")
+    for visitante in visitantes:
+        if visitantes[visitante["tipo_ingresso"]] == "VIP":
+            contador3 = contador3 + 1
+    print(f"Ingressos VIP: {contador3}")
+    for visitante in visitantes:
+        if visitantes(visitante["tipo_ingresso"]) == "premium":
+            contador4 = contador4 + 1
+    print(f"Ingressos Premium: {contador4}")
 
 def remover_visitante(visitantes):
-
     print("\n" + "=" * 50)
     print("REMOVER VISITANTE")
     print("=" * 50)
@@ -222,7 +229,6 @@ def ordenar_visitantes(visitantes):
         print("Opção inválida")
 
 def main():
-
     while True:
         print("\n" + "=" * 60)
         print("CENTRAL DE VISITANTES DO PARQUE")
@@ -233,16 +239,15 @@ def main():
         print("4 - Ordenar visitantes")
         print("5 - Filtrar visitantes")
         print("6 - Consultar visitante")
-        print("7 - Consultar ")
+        print("7 - Consultar visitante por data de visita ")
+        print("8 - Estatísticas")
         print("0 - Encerrar programa")
         print("=" * 60)
         opcao = input(
             "Escolha uma opção: "
         ).strip()
-
         if opcao == "1":
             cadastrar_visitante(visitantes)
-            salvar_visitantes(visitantes)
         elif opcao == "2":
             remover_visitante(visitantes)
             remover_visitantes_json(visitantes)
@@ -254,6 +259,8 @@ def main():
             consultar_visitante(visitantes)
         elif opcao == "7":
             consultar_visitantes_por_data_da_visita(visitantes)
+        elif opcao == "8":
+            estatisticas(visitantes)
         elif opcao == "0":
             print("\nPrograma encerrado.")
             break
