@@ -18,13 +18,7 @@ def calcular_idade(data_nascimento):
     data_nascimento = datetime.strptime(data_nascimento, "%d/%m/%Y")
     hoje = datetime.now()
     idade = hoje.year - data_nascimento.year
-    if (
-        hoje.month,
-        hoje.day
-    ) < (
-        data_nascimento.month,
-        data_nascimento.day
-    ):
+    if (hoje.month, hoje.day) < (data_nascimento.month, data_nascimento.day):
         idade -= 1
     return idade
 
@@ -88,8 +82,7 @@ def cadastrar_visitante(visitantes):
         "cpf": cpf,
         "tipo_ingresso": tipo_ingresso,
         "data_visita": data_visita,
-        "numero_ingresso": numero_ingresso
-    }
+        "numero_ingresso": numero_ingresso}
     visitantes.append(visitante)
     visitante_repository.salvar_visitantes(visitantes)
     print("\nVisitante cadastrado com sucesso!")
@@ -107,9 +100,7 @@ def listar_visitantes(visitantes):
         print("Nenhum visitante cadastrado.")
         return
     for indice, visitante in enumerate(visitantes, start=1):
-        idade = calcular_idade(
-            visitante["data_nascimento"]
-        )
+        idade = calcular_idade(visitante["data_nascimento"])
         print(f"\nVisitante {indice}")
         print(f"Nome: {visitante['nome']}")
         print(f"Idade: {idade} anos")
@@ -169,25 +160,6 @@ def estatisticas(visitantes):
     print("\n" + "=" * 40)
     print("ESTATÍSTICAS DO PARQUE")
     print("=" * 40)
-    contador1 = 0
-    contador2 = 0
-    contador3 = 0
-    contador4 = 0
-    for visitante in visitantes:
-        contador1 = contador1 + 1
-    print(f"Total de visitantes: {contador1}")
-    for visitante in visitantes:
-        if visitantes[contador2["tipo_ingresso"]] == "Normal":
-            contador2 = contador2 + 1
-    print(f"Ingressos Normal: {contador2}")
-    for visitante in visitantes:
-        if visitantes[visitante["tipo_ingresso"]] == "VIP":
-            contador3 = contador3 + 1
-    print(f"Ingressos VIP: {contador3}")
-    for visitante in visitantes:
-        if visitantes(visitante["tipo_ingresso"]) == "premium":
-            contador4 = contador4 + 1
-    print(f"Ingressos Premium: {contador4}")
 
 def remover_visitante(visitantes):
     print("\n" + "=" * 50)
@@ -243,9 +215,7 @@ def main():
         print("8 - Estatísticas")
         print("0 - Encerrar programa")
         print("=" * 60)
-        opcao = input(
-            "Escolha uma opção: "
-        ).strip()
+        opcao = input("Escolha uma opção: ").strip()
         if opcao == "1":
             cadastrar_visitante(visitantes)
         elif opcao == "2":
@@ -266,6 +236,5 @@ def main():
             break
         else:
             print("\nOpção inválida. " "Tente novamente.")
-
 if __name__ == "__main__":
     main()

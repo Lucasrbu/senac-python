@@ -1,0 +1,18 @@
+[
+    {
+        "nome": "Lucas",
+        "data_nascimento": "17/10/2009",
+        "cpf": "1",
+        "tipo_ingresso": "Normal",
+        "data_visita": "20/10/2026",
+        "numero_ingresso": "aa507c43-77ce-49d1-a8c8-c253366727a9"
+    },
+    {
+        "nome": "Matheus",
+        "data_nascimento": "25/05/2026",
+        "cpf": "2",
+        "tipo_ingresso": "VIP",
+        "data_visita": "24/10/2026",
+        "numero_ingresso": "a843a1a0-b138-4373-adfb-e121bb37e7ea"
+    }
+]
